@@ -1,0 +1,270 @@
+﻿Version=6.5
+NumberOfModules=1
+Module1=Starter
+Build1=Default,b4a.My_CGPA
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.b4x.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="5" android:targetSdkVersion="19"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+IconFile=
+NumberOfFiles=3
+File1=cgpa.bal
+File2=plus-48.png
+File3=school-60.png
+NumberOfLibraries=1
+Library1=core
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: My CGPA
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: portrait
+	#CanInstallToExternalStorage: true
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: True
+	#IncludeTitle: false
+#End Region
+
+Sub Process_Globals
+	'These global variables will be declared once when the application starts.
+	'These variables can be accessed from all modules.
+	Dim timer1 As Timer
+End Sub
+
+Sub Globals
+	'These global variables will be redeclared each time the activity is created.
+	'These variables can only be accessed from this module.
+	
+	Private ScrollView1 As ScrollView
+	Private Spinner1 As Spinner
+	Private Spinner2 As Spinner
+	Private PnlHome As Panel
+	Private PnlSplash As Panel
+	Private PnlLogo As Panel
+	Dim cuList As List
+	Dim grdList As List
+	Dim PanelTop, PanelHeight As Int
+	Dim arr(3) As Label
+	Dim j As List
+	
+	Dim count As Int =0
+	
+	Private LblCGPA As Label
+	Private Spinner3 As Spinner
+	Private Spinner4 As Spinner
+	Private PnlUpdate As Panel
+	End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	'Do not forget to load the layout file created with the visual designer. For example:
+	'Activity.LoadLayout("Layout1")
+	Activity.LoadLayout("cgpa")
+	centercen(PnlLogo)
+	PnlHome.SetLayout(PnlHome.Width,0,PnlHome.Width,PnlHome.Height)
+	timer1.Initialize("Timer1",3000)
+	timer1.Enabled = True
+	Spinner1.AddAll(Array As String("Credit Unit","6","5","4","3","2","1"))
+	Spinner2.AddAll(Array As String("Grade","A","B","C","D","E","F"))
+	
+	
+	Spinner3.AddAll(Array As String("Credit Unit","6","5","4","3","2","1"))
+	Spinner4.AddAll(Array As String("Grade","A","B","C","D","E","F"))
+	cuList.Initialize
+	grdList.Initialize
+	
+	PanelHeight  = 45dip
+	
+	
+	
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+
+Sub centercen (ctrl As View)
+	'place a control in the center of the screen
+	ctrl.Left = (Activity.Width - ctrl.Width) / 2
+	ctrl.top = (Activity.Height - ctrl.Height) / 2
+End Sub
+
+Sub Timer1_Tick
+	timer1.Enabled = False
+	PnlSplash.SetLayoutAnimated(700,-PnlSplash.Width,0,PnlSplash.Width,PnlSplash.Height)
+	PnlHome.SetLayoutAnimated(800,0,0,PnlHome.Width,PnlHome.Height)
+	
+End Sub
+Sub UpdateCgpa(x As Int, cu As String, gd As String)
+	Dim panel0 As Panel
+	panel0 = ScrollView1.Panel
+	Dim panel1 As Panel
+	Dim label1 As Label
+	Dim label2 As Label
+	Dim label3 As Label
+'	Dim panelUpdt As Panel
+	
+	
+	
+	label1.Initialize("")
+	label2.Initialize("")
+	label3.Initialize("")
+	panel1.Initialize("Panel1")
+'	panelUpdt.Initialize("panelUpdt")
+	
+	panel1.Color = Colors.ARGB(0,0,0,0)
+	panel1.BringToFront
+	
+	label1.Text = (x +1) & "."
+	label1.TextSize = 25
+	label1.TextColor = Colors.Black
+	label1.Tag = 0
+	
+	label2.Text = cu
+	label2.Textsize = 25
+	label2.TextColor = Colors.RGB(107,142,35)
+	label2.Gravity = Gravity.CENTER
+	label2.Tag = 1
+	
+	label3.Text = gd
+	label3.TextColor = Colors.RGB(107,142,35)
+	label3.Gravity = Gravity.CENTER
+	label3.TextSize = 25
+	label3.Tag = 2
+	
+	
+	
+	'label1.Color = Colors.Green
+	panel0.AddView(panel1,0,PanelTop,ScrollView1.Width,PanelHeight)
+	
+	panel1.AddView(label1,5dip,5dip,20%x,65dip)
+	panel1.AddView(label2,label1.Width + 10dip,5dip,40%x,30dip)
+	panel1.AddView(label3,label2.Left + label2.Width + 5dip,5dip,40%x,30dip)
+'	panel1.AddView(panelUpdt,0,PanelTop,ScrollView1.Width,PanelHeight)
+	
+	PanelTop=PanelTop+PanelHeight+5dip
+		
+End Sub
+
+
+Sub pnlCalculate_Click
+	Log("yes")
+	CalculateCGPA(cuList,grdList)
+End Sub
+
+Sub CalculateCGPA(k As List, f As List)
+	Dim tcur As Int
+	Dim tmp As Int
+	Dim tcue As Int
+	Dim cgpa As Double
+	For i = 0 To k.Size-1
+		tcur = tcur + k.Get(i)
+		Select f.Get(i)
+			Case "A"
+				tmp = 5
+			Case "B"
+				tmp =4
+			Case "C"
+				tmp = 3
+			Case "D"
+				tmp = 2
+			Case "E"
+				tmp =1
+			Case "F"
+				tmp = 0				
+		End Select
+		tcue = tcue + k.Get(i) * tmp
+	Next
+	
+	cgpa = Round2((tcue/tcur),2)
+	LblCGPA.Text = "CGPA = " & cgpa
+	LblCGPA.TextSize = 25
+	LblCGPA.TextColor = Colors.Black
+End Sub
+
+Sub Panel1_Click
+	Dim p As Panel
+	p = Sender
+	j.Initialize
+	For Each v As Label In p.GetAllViewsRecursive
+		j.Add(v)		
+	Next
+	
+	arr(0) = j.Get(0)
+	arr(1) = j.Get(1)
+	arr(2) = j.Get(2)
+	Log(arr(1).Text)
+	PnlUpdate.BringToFront
+	PnlUpdate.Visible = True
+	PnlUpdate.Enabled = True
+	
+	Dim a As String = arr(1).Text
+	Select a
+		Case "6"
+			Spinner3.SelectedIndex = 1
+		Case "5"
+			Spinner3.SelectedIndex = 2
+		Case "4"
+			Spinner3.SelectedIndex = 3
+		Case "3"
+			Spinner3.SelectedIndex = 4
+		Case "2"
+			Spinner3.SelectedIndex = 5
+		Case "1"
+			Spinner3.SelectedIndex = 6
+	End Select
+		
+	Dim b As String = arr(2).Text
+	'	Log(b)
+	Select b
+		Case "A"
+			Spinner4.SelectedIndex = 1
+		Case "B"
+			Spinner4.SelectedIndex = 2
+		Case "C"
+			Spinner4.SelectedIndex = 3
+		Case "D"
+			Spinner4.SelectedIndex = 4
+		Case "E"
+			Spinner4.SelectedIndex = 5
+		Case "F"
+			Spinner4.SelectedIndex = 6
+	End Select
+End Sub
+
+
+Sub Panel8_Click
+	
+	arr(1).Text = Spinner3.SelectedItem
+	arr(2).Text = Spinner4.SelectedItem
+	Dim index As Int = arr(0).Text - 1
+	
+	cuList.Set(index,Spinner3.SelectedItem)
+	grdList.Set(index,Spinner4.SelectedItem)
+	
+	CalculateCGPA(cuList,grdList)
+	PnlUpdate.Visible = False
+End Sub
+
+Sub PnlUpdate_Click
+	PnlUpdate.Enabled = False
+	PnlUpdate.SendToBack
+	PnlUpdate.Visible=False
+End Sub
+
+Sub imgAddCourse_Click
+	If Spinner1.SelectedIndex = 0 Or Spinner2.SelectedIndex = 0 Then
+		ToastMessageShow("please fill your grade selections",True)
+	Else
+		cuList.Add(Spinner1.SelectedItem)
+		grdList.Add(Spinner2.SelectedItem)
+		UpdateCgpa(count, Spinner1.SelectedItem, Spinner2.SelectedItem)
+		
+		Spinner1.SelectedIndex = 0
+		Spinner2.SelectedIndex = 0
+		count = count + 1
+	End If
+End Sub
